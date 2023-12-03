@@ -88,6 +88,7 @@ ipython_config.py
 *.ipynb
 readme.txt
 config.ini
+/archive/
 
 
 # pyenv

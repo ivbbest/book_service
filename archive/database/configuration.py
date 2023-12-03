@@ -6,10 +6,8 @@ from sqlalchemy.exc import SQLAlchemyError
 
 import configparser
 
-
 config = configparser.ConfigParser()
 config.read('config.ini')
-
 
 Base = declarative_base()
 
@@ -22,3 +20,10 @@ Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 # Создаем объект сессии из фабрики Session
 session = Session()
+
+def get_db():
+    db = Session()
+    try:
+        yield db
+    finally:
+        db.close()
