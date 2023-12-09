@@ -1,9 +1,11 @@
 from fastapi import FastAPI
+from fastapi.security import OAuth2PasswordRequestForm
+
 from src.auth.schemas import UserCreate
 from src.auth.database import engine, get_db
 from fastapi import HTTPException, Depends
 from sqlalchemy.orm import Session
-from src.auth import models, crud
+from src.auth import models, crud, utils
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -30,3 +32,17 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
     if db_user is None:
         raise HTTPException(status_code=404, detail="User not found")
     return db_user
+
+@app.post("/auth")
+async def auth(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    user = crud.get_user_by_email(db, email=form_data.username)
+
+    if not user:
+        raise HTTPException(status_code=400, detail="Incorrect email or password")
+
+    if not utils.validate_password(
+        password=form_data.password, hashed_password=user["password"]
+    ):
+        raise HTTPException(status_code=400, detail="Incorrect email or password")
+
+    return user["id"]
