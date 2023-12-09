@@ -1,19 +1,10 @@
-from datetime import datetime
-from typing import Optional
-
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr
 
 
 class UserCreate(BaseModel):
-    """ Проверяет sign-up запрос """
     email: EmailStr
-    username: str
-    password: str = Field(min_length=7)
+    password: str
+    is_active: bool
 
-
-class UserBase(BaseModel):
-    """ Формирует тело ответа с деталями пользователя """
-    id: Optional[int] = Field(primary_key=True)
-    email: EmailStr
-    username: str
-    registered_at: datetime
+    class Config:
+        orm_mode = True
