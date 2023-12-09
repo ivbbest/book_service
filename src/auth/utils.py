@@ -1,22 +1,17 @@
 import hashlib
 import random
 import string
-from datetime import datetime, timedelta
-from sqlalchemy import and_
 
-import database
-from .models import User
-from .schemas import UserBase, UserCreate
 
 def get_random_string(length=12):
-    """ Генерирует случайную строку, использующуюся как соль """
-    return "".join(random.choice(string.ascii_letters) for _ in range(length))
+    """ Генерирует случайную строку"""
+    return "".join(random.choice(string.ascii_letters + string.punctuation) for _ in range(length))
 
 
-def hash_password(password: str, salt: str = None):
+def hash_password():
     """ Хеширует пароль с солью """
-    if salt is None:
-        salt = get_random_string()
+    salt = get_random_string()
+    password = get_random_string()
     enc = hashlib.pbkdf2_hmac("sha256", password.encode(), salt.encode(), 100_000)
     return enc.hex()
 
