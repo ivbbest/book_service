@@ -1,5 +1,4 @@
 from sqlalchemy.orm import Session
-
 from .models import User
 from .schemas import UserCreate
 from .utils import hash_password, get_random_string
