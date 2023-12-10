@@ -20,7 +20,7 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
 def create_user(db: Session, user: UserCreate):
     salt = get_random_string()
     hashed_password = hash_password(user.password, salt)
-    db_user = User(email=user.email, username=user.email, password=f"{salt}${hashed_password}")
+    db_user = User(email=user.email, password=f"{salt}${hashed_password}")
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
