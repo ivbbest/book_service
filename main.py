@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.security import OAuth2PasswordRequestForm
 
-from src.auth.schemas import UserCreate
+from src.auth.schemas import UserCreate, UserBase
 from src.auth.database import engine, get_db
 from fastapi import HTTPException, Depends
 from sqlalchemy.orm import Session
@@ -12,7 +12,7 @@ models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 
-@app.post("/sign-up/", response_model=UserCreate)
+@app.post("/sign-up/", response_model=UserBase)
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
     db_user = crud.get_user_by_email(db, email=user.email)
     if db_user:
@@ -20,13 +20,13 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
     return crud.create_user(db=db, user=user)
 
 
-@app.get("/users/", response_model=list[UserCreate])
+@app.get("/users/", response_model=list[UserBase])
 def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     users = crud.get_users(db, skip=skip, limit=limit)
     return users
 
 
-@app.get("/users/{user_id}", response_model=UserCreate)
+@app.get("/users/{user_id}", response_model=UserBase)
 def read_user(user_id: int, db: Session = Depends(get_db)):
     db_user = crud.get_user(db, user_id=user_id)
     if db_user is None:
