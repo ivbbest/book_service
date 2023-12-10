@@ -10,7 +10,7 @@ from src.auth import models, crud, utils
 
 models.Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
+app = FastAPI(title="Book service", version="0.0.1")
 
 
 @app.post("/sign-up/", response_model=UserBase)
