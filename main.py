@@ -1,12 +1,12 @@
 from fastapi import FastAPI
 from fastapi.security import OAuth2PasswordRequestForm
 
-from src.auth.schemas import UserCreate, UserBase
+from schemas.UserSchema import UserCreate, UserBase
 from src.auth.database import get_db
 from fastapi import HTTPException, Depends
 from sqlalchemy.orm import Session
-from src.auth import crud, utils
-
+from src.auth import utils
+from repositories import crud
 
 app = FastAPI(title="Book service", version="0.0.1")
 
