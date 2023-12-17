@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.security import OAuth2PasswordRequestForm
 
 from schemas.UserSchema import UserCreate, UserBase
-from src.auth.database import get_db
+from configs.database import get_db
 from fastapi import HTTPException, Depends
 from sqlalchemy.orm import Session
 from src.auth import utils
